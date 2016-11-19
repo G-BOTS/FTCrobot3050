@@ -103,6 +103,7 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         double right;
         double raise;
         double shoot;
+        double Ecurrpos;
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
@@ -110,14 +111,18 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         right = -gamepad1.right_stick_y;
         raise = gamepad1.left_trigger;
         shoot = gamepad1.right_trigger;
+        Ecurrpos = robot.Elevator.getCurrentPosition();
         robot.leftMotor.setPower(left);
         robot.rightMotor.setPower(right);
 
-        if(gamepad1.right_trigger > 0.05)     {
+        if(gamepad1.right_trigger > 0.05)
+        {
+            robot.Trigger.setTargetPosition(50);
             robot.Trigger.setPower(shoot);
         }
         else if (gamepad1.right_bumper == true)
         {
+            robot.Trigger.setTargetPosition(-5);
             robot.Trigger.setPower(-.25);
         }
         else {
@@ -126,13 +131,13 @@ public class PushbotTeleopTank_Iterative extends OpMode{
 
         if(gamepad1.left_trigger > 0.05) {
 
+            robot.Elevator.setTargetPosition(2000);
             robot.Elevator.setPower(raise);
-            robot.Elevator.setTargetPosition(500);
         }
         else if(gamepad1.left_bumper == true)
         {
-            robot.Elevator.setPower(-.5);
             robot.Elevator.setTargetPosition(0);
+            robot.Elevator.setPower(-.5);
         }
         else
         {
@@ -143,7 +148,7 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         telemetry.addData("right", "%.2f", right);
         telemetry.addData("shoot", "%.2f", shoot);
         telemetry.addData("raise", "%.2f", raise);
-        telemetry.addData("Elevator Encoder", "%.2f", robot.Elevator.getCurrentPosition());
+        telemetry.addData("Elevator Encoder", "%.2f", Ecurrpos);
     }
 
     /*

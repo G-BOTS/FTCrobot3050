@@ -74,8 +74,8 @@ public class HardwarePushbot
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Elevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Trigger.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Trigger.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     }
 
