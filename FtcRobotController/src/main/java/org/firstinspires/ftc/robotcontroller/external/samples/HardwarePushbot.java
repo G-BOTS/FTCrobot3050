@@ -55,6 +55,8 @@ public class HardwarePushbot
         Trigger = hwMap.dcMotor.get("Trigger");
         leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        Elevator.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        Trigger.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
 
         // Set all motors to zero power
         leftMotor.setPower(0);
@@ -62,10 +64,18 @@ public class HardwarePushbot
         Elevator.setPower(0);
         Trigger.setPower(0);
 
+        //Reset Emcoders
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Trigger.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Elevator.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Trigger.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 

@@ -82,9 +82,12 @@ public class PushbotTeleopTank_Iterative extends OpMode{
      */
     @Override
     public void init_loop() {
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
+        robot.Elevator.setPower(0);
+        robot.Trigger.setPower(0);
     }
-
-    /*
+         /*
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
@@ -110,24 +113,26 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         robot.leftMotor.setPower(left);
         robot.rightMotor.setPower(right);
 
-        if(gamepad1.right_trigger > .5)     {
-            robot.Trigger.setPower(-shoot);
-        }
-        else if (gamepad1.right_bumper = true)
-        {
+        if(gamepad1.right_trigger > 0.05)     {
             robot.Trigger.setPower(shoot);
+        }
+        else if (gamepad1.right_bumper == true)
+        {
+            robot.Trigger.setPower(-.25);
         }
         else {
             robot.Trigger.setPower(0);
         }
 
-        if(gamepad1.left_trigger > .5) {
+        if(gamepad1.left_trigger > 0.05) {
 
             robot.Elevator.setPower(raise);
+            robot.Elevator.setTargetPosition(500);
         }
-        else if(gamepad1.right_bumper)
+        else if(gamepad1.left_bumper == true)
         {
-            robot.Elevator.setPower(-.75);
+            robot.Elevator.setPower(-.5);
+            robot.Elevator.setTargetPosition(0);
         }
         else
         {
@@ -138,6 +143,7 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         telemetry.addData("right", "%.2f", right);
         telemetry.addData("shoot", "%.2f", shoot);
         telemetry.addData("raise", "%.2f", raise);
+        telemetry.addData("Elevator Encoder", "%.2f", robot.Elevator.getCurrentPosition());
     }
 
     /*
