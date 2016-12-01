@@ -86,6 +86,8 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         robot.rightMotor.setPower(0);
         robot.Elevator.setPower(0);
         robot.Trigger.setPower(0);
+        robot.Lift.setPower(0);
+        robot.Intake.setPower(0);
     }
          /*
      * Code to run ONCE when the driver hits PLAY
@@ -104,6 +106,11 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         double raise;
         double shoot;
         double Ecurrpos;
+        double up;
+        double down;
+        double intake;
+        double outake;
+
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
@@ -112,6 +119,11 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         raise = gamepad1.left_trigger;
         shoot = gamepad1.right_trigger;
         Ecurrpos = robot.Elevator.getCurrentPosition();
+        up = .5;
+        down = -.5;
+        intake = .5;
+        outake = -.5;
+
         robot.leftMotor.setPower(left);
         robot.rightMotor.setPower(right);
 
@@ -142,6 +154,32 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         else
         {
             robot.Elevator.setPower(0);
+        }
+
+        if(gamepad1.a == true)
+        {
+            robot.Lift.setPower(up);
+        }
+        else if (gamepad1.y == true)
+        {
+            robot.Lift.setPower(down);
+        }
+        else
+        {
+            robot.Lift.setPower(0);
+        }
+
+        if(gamepad1.x == true)
+        {
+            robot.Intake.setPower(intake);
+        }
+        else if(gamepad1.b == true)
+        {
+            robot.Intake.setPower(outake);
+        }
+        else
+        {
+            robot.Intake.setPower(0);
         }
         // Send telemetry message to signify robot running;
         telemetry.addData("left",  "%.2f", left);
