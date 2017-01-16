@@ -87,7 +87,7 @@ public class Auto2017  extends LinearOpMode{
             robot.leftMotor.setPower(Math.abs(speed));
             robot.rightMotor.setPower(Math.abs(speed));
 
-            // keep looping while we are still active, and there is time left, and both motors are running.
+            //        keep looping while we are still active, and there is time left, and both motors are running.
             while (opModeIsActive() && (runtime.seconds() < timeoutS) &&
                     (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
                 // Display it for the driver.
