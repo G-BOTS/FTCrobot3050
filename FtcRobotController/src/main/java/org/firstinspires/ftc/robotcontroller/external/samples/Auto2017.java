@@ -25,7 +25,7 @@ public class Auto2017  extends LinearOpMode{
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
 
-    private int array[] = (4,8);
+    private int array[] = {4,8};
 
     public void runOpMode() {
 
