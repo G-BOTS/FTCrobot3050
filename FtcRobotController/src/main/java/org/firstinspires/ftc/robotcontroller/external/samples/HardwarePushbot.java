@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -32,6 +34,7 @@ public class HardwarePushbot
     public DcMotor  Lift       = null;
     public DcMotor  Intake       = null;
     public Servo    rightClaw   = null;
+    public GyroSensor Gyro  = null;
 
     public static final double MID_SERVO       =  0.5 ;
     public static final double ARM_UP_POWER    =  0.45 ;
@@ -65,6 +68,8 @@ public class HardwarePushbot
         Lift.setDirection(DcMotor.Direction.FORWARD);
         Intake.setDirection(DcMotor.Direction.FORWARD);
 
+        Gyro = hwMap.gyroSensor.get("Gyro");
+
         // Set all motors to zero power
         leftMotor.setPower(0);
         rightMotor.setPower(0);
@@ -80,6 +85,8 @@ public class HardwarePushbot
         Trigger.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        Gyro.calibrate();
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
