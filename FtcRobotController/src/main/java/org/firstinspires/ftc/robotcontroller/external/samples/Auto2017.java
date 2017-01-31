@@ -26,7 +26,7 @@ public class Auto2017  extends LinearOpMode {
     static final double TURN_SPEED = 0.5;
 
     private double distance[] = {24,43.3,12,48,48 };
-    private float gyrodegree[] = {-56.3f, 33.7f, 45.0f};
+    private float gyrodegree[] = {56.3f, -33.7f,-5.0f};
 
 
     public void runOpMode() {
