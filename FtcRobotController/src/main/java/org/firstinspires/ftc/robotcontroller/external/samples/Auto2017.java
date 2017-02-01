@@ -60,7 +60,7 @@ public class Auto2017  extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[1], distance[1], 5.0);  // S1: Forward 24 Inches with 5 Sec timeout shoot ball
-        gyroturn(gyrodegree[1], -TURN_SPEED, TURN_SPEED);
+        gyroturn(gyrodegree[1], TURN_SPEED, -TURN_SPEED);
         encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[2], distance[2], 5.0); // S3:  Forward 43.3 iNCHES
         gyroturn(gyrodegree[2], TURN_SPEED, -TURN_SPEED);
         encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[3], distance[3], 5.0);// S5: Forward 12 Inches with 4 Sec timeout
