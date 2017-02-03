@@ -126,6 +126,9 @@ public class Auto2017  extends LinearOpMode {
         float error = robot.Gyro.getHeading() - desheading;
         while((Math.abs(error)) > 0.0f)
         {
+            telemetry.addData("Path1", "Aiming to %7d :%7d", error, desheading);
+
+                    telemetry.update();
             robot.leftMotor.setPower(leftspeed);
             robot.rightMotor.setPower(rightspeed);
         }

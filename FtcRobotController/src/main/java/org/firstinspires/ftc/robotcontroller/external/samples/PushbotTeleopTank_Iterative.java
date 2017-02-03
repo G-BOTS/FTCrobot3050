@@ -129,13 +129,13 @@ public class PushbotTeleopTank_Iterative extends OpMode{
 
         if(gamepad1.right_trigger > 0.05)
         {
-            robot.Trigger.setTargetPosition(50);
-            robot.Trigger.setPower(shoot);
+            robot.Trigger.setTargetPosition(-5);
+            robot.Trigger.setPower(-shoot);
         }
         else if (gamepad1.right_bumper == true)
         {
-            robot.Trigger.setTargetPosition(-5);
-            robot.Trigger.setPower(-.25);
+            robot.Trigger.setTargetPosition(50);
+            robot.Trigger.setPower(.25);
         }
         else {
             robot.Trigger.setPower(0);
