@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
-/**
+/*
  * Created by ferasmus on 12/28/2016.
  */
 
@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Pushbot: Auto Drive By Encoder", group="Pushbot")
 @Disabled
 public class Auto2017  extends LinearOpMode {
+
     HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -25,7 +26,7 @@ public class Auto2017  extends LinearOpMode {
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
 
-    private double distance[] = {24,43.3,12,48,48 };
+    private double distance[] = {24,43.3f,12,48,48 };
     private float gyrodegree[] = {56.3f, -33.7f,-5.0f};
 
 
@@ -60,13 +61,13 @@ public class Auto2017  extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[1], distance[1], 5.0);  // S1: Forward 24 Inches with 5 Sec timeout shoot ball
-        gyroturn(gyrodegree[1], TURN_SPEED, -TURN_SPEED);
-        encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[2], distance[2], 5.0); // S3:  Forward 43.3 iNCHES
-        gyroturn(gyrodegree[2], TURN_SPEED, -TURN_SPEED);
-        encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[3], distance[3], 5.0);// S5: Forward 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[4], distance[4], 5.0);// S6: Forward 48 inches  with 4 Sec timeout
-        gyroturn(gyrodegree[3], TURN_SPEED, -TURN_SPEED);
-        encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[5], distance[5], 5.0);// S8: Forward 48 inches  with 4 Sec timeout
+       // gyroturn(gyrodegree[1], TURN_SPEED, -TURN_SPEED);
+       // encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[2], distance[2], 5.0); // S3:  Forward 43.3 iNCHES
+        //gyroturn(gyrodegree[2], TURN_SPEED, -TURN_SPEED);
+       // encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[3], distance[3], 5.0);// S5: Forward 12 Inches with 4 Sec timeout
+        //encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[4], distance[4], 5.0);// S6: Forward 48 inches  with 4 Sec timeout
+        //gyroturn(gyrodegree[3], TURN_SPEED, -TURN_SPEED);
+       // encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[5], distance[5], 5.0);// S8: Forward 48 inches  with 4 Sec timeout
         
         //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
         //encoderdrive(DRIVE_SPEED,DRIVE SPEED)
@@ -123,17 +124,19 @@ public class Auto2017  extends LinearOpMode {
 
     public void gyroturn(float desheading, double leftspeed, double rightspeed)
     {
-        float error = robot.Gyro.getHeading() - desheading;
-        while((Math.abs(error)) > 0.0f)
-        {
-            telemetry.addData("Path1", "Aiming to %7d :%7d", error, desheading);
+        float error;
 
-                    telemetry.update();
-            robot.leftMotor.setPower(leftspeed);
-            robot.rightMotor.setPower(rightspeed);
+        if(opModeIsActive()) {
+            error = robot.Gyro.getHeading() - desheading;
+            while ((Math.abs(error)) > 0.0f) {
+                telemetry.addData("Path1", "Aiming to %7f :%7f", error, desheading);
+
+                telemetry.update();
+                robot.leftMotor.setPower(leftspeed);
+                robot.rightMotor.setPower(rightspeed);
+            }
+            robot.leftMotor.setPower(0);
+            robot.rightMotor.setPower(0);
         }
-        robot.leftMotor.setPower(0);
-        robot.rightMotor.setPower(0);
-
     }
 }

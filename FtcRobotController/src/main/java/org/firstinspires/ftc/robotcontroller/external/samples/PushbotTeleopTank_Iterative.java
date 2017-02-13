@@ -110,6 +110,8 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         double down;
         double intake;
         double outake;
+        double intake_pwr;
+        double lift_pwr;
 
 
 
@@ -119,8 +121,8 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         raise = gamepad1.left_trigger;
         shoot = gamepad1.right_trigger;
         Ecurrpos = robot.Elevator.getCurrentPosition();
-        up = .5;
-        down = -.5;
+        up = .25;
+        down = -.25;
         intake = .5;
         outake = -.5;
 
@@ -130,11 +132,11 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         if(gamepad1.right_trigger > 0.05)
         {
             robot.Trigger.setTargetPosition(-5);
-            robot.Trigger.setPower(-shoot);
+            robot.Trigger.setPower(shoot);
         }
-        else if (gamepad1.right_bumper == true)
+        else if (gamepad1.right_bumper)
         {
-            robot.Trigger.setTargetPosition(50);
+            robot.Trigger.setTargetPosition(125);
             robot.Trigger.setPower(.25);
         }
         else {
@@ -146,7 +148,7 @@ public class PushbotTeleopTank_Iterative extends OpMode{
             robot.Elevator.setTargetPosition(2000);
             robot.Elevator.setPower(raise);
         }
-        else if(gamepad1.left_bumper == true)
+        else if(gamepad1.left_bumper)
         {
             robot.Elevator.setTargetPosition(0);
             robot.Elevator.setPower(-.5);
@@ -156,11 +158,11 @@ public class PushbotTeleopTank_Iterative extends OpMode{
             robot.Elevator.setPower(0);
         }
 
-        if(gamepad1.a == true)
+        if(gamepad1.a)
         {
             robot.Lift.setPower(up);
         }
-        else if (gamepad1.y == true)
+        else if (gamepad1.y)
         {
             robot.Lift.setPower(down);
         }
@@ -169,11 +171,11 @@ public class PushbotTeleopTank_Iterative extends OpMode{
             robot.Lift.setPower(0);
         }
 
-        if(gamepad1.x == true)
+        if(gamepad1.x)
         {
             robot.Intake.setPower(intake);
         }
-        else if(gamepad1.b == true)
+        else if(gamepad1.b)
         {
             robot.Intake.setPower(outake);
         }
@@ -181,12 +183,17 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         {
             robot.Intake.setPower(0);
         }
+
+        intake_pwr = robot.Intake.getPower();
+        lift_pwr = robot.Lift.getPower();
         // Send telemetry message to signify robot running;
         telemetry.addData("left",  "%.2f", left);
         telemetry.addData("right", "%.2f", right);
         telemetry.addData("shoot", "%.2f", shoot);
         telemetry.addData("raise", "%.2f", raise);
         telemetry.addData("Elevator Encoder", "%.2f", Ecurrpos);
+        telemetry.addData("Intake power", "%.2f", intake_pwr);
+        telemetry.addData("Lift power", "%.2f", lift_pwr);
     }
 
     /*

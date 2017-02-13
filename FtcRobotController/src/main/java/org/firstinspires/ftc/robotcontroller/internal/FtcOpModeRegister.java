@@ -79,7 +79,7 @@ public class FtcOpModeRegister implements OpModeRegister {
          */
         AnnotatedOpModeRegistrar.register(manager);
 
-        manager.register("Teleop2016", Teleop2016.class);
+        //manager.register("Teleop2016", Teleop2016.class);
         manager.register("PushbotTeleopTank_Iterative", PushbotTeleopTank_Iterative.class);
         manager.register("PushbotAutoDriveByEnocder_Linear", PushbotAutoDriveByEncoder_Linear.class);
         manager.register("Auto2017", Auto2017.class);

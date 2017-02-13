@@ -61,8 +61,8 @@ public class HardwarePushbot
         Trigger = hwMap.dcMotor.get("Trigger");
         Lift = hwMap.dcMotor.get("Lift");
         Intake = hwMap.dcMotor.get("Intake");
-        leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         Elevator.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         Trigger.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         Lift.setDirection(DcMotor.Direction.FORWARD);
@@ -83,19 +83,19 @@ public class HardwarePushbot
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Elevator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Trigger.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //Intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         Gyro.calibrate();
 
         // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
+        // May want to use RUN_USING_ENCODERS if encoders are installed
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Trigger.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
