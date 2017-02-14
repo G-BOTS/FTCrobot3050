@@ -32,7 +32,7 @@ public class RedAuto2017 {
 }
 //WaitForStart*/
 
-Public class experstatemachine extends opmode
+Public class experstatemachine extends OpMode
 {
     //a list of all the system states
     private enum State {
@@ -41,5 +41,21 @@ Public class experstatemachine extends opmode
         STATE_RELOAD_NEXT_SHOT,
         STATE_STOP,
                 _}
+//pathseg are defined as distances for left wheel and right wheel and then the power to the motors
+    final PathSeg[] mshootpospath ={
+            new PathSeg( 3.2, 3.2, 0.6), //forward
+            new PathSeg( -4.0, 4.0, 0.4) //slowdown and rotate  left
+    };
+
+    final PathSeg[] mParalleltowallpath ={
+            new PathSeg( 3.2, 3.2, 0.6), //forward
+            new PathSeg( -4.0, 4.0, 0.4) //slowdown and rotate  left
+    };
+
+
+
+
+
+
 
 }
