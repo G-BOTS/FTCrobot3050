@@ -32,6 +32,10 @@ public class RedAuto2017 {
 }
 //WaitForStart*/
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.Servo;
+
 Public class experstatemachine extends OpMode
 {
     //a list of all the system states
@@ -53,7 +57,37 @@ Public class experstatemachine extends OpMode
     };
 
 
+    final double TicksPerInch =240;
 
+    final double TriggerForShoot=500;
+    final double ShooterFullExtend=500;
+
+    //robot devices
+    public DcMotor leftMotor   = null;
+    public DcMotor  rightMotor  = null;
+    public DcMotor  Elevator    = null;
+    public DcMotor  Trigger    = null;
+    public DcMotor  Lift       = null;
+    public DcMotor  Intake       = null;
+    public Servo rightClaw   = null;
+    public GyroSensor Gyro  = null;
+
+    private int mLeftEncoder;
+    private int mRightEncoder;
+    //
+    //loop cycle time stats variables
+
+
+
+
+
+
+
+
+
+
+
+    fina
 
 
 
