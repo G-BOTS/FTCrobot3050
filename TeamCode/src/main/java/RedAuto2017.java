@@ -76,6 +76,8 @@ Public class experstatemachine extends OpMode
     private int mRightEncoder;
     //
     //loop cycle time stats variables
+    Public ElapsedTime =mruntime = new ELapsedTime();  //time into round
+
 
 
 
