@@ -76,7 +76,13 @@ Public class experstatemachine extends OpMode
     private int mRightEncoder;
     //
     //loop cycle time stats variables
-    Public ElapsedTime =mruntime = new ELapsedTime();  //time into round
+    Public ElapsedTime  mRunTime = new ELapsedTime();  //time into round
+
+    private ElapsedTime mStateTime = new ElapsedTime():  //time into state
+
+    private state  mcurrentState; //statemachine state
+    private PathSeg mcurrentPath; //array to hold path
+    private int     mcurrentSeg; //Index of the current seg in the current path
 
 
 
