@@ -63,14 +63,14 @@ Public class experstatemachine extends OpMode
     final double ShooterFullExtend=500;
 
     //robot devices
-    public DcMotor leftMotor   = null;
-    public DcMotor  rightMotor  = null;
-    public DcMotor  Elevator    = null;
-    public DcMotor  Trigger    = null;
-    public DcMotor  Lift       = null;
-    public DcMotor  Intake       = null;
-    public Servo rightClaw   = null;
-    public GyroSensor Gyro  = null;
+    public DcMotor leftMotor = null;
+    public DcMotor rightMotor = null;
+    public DcMotor Elevator = null;
+    public DcMotor Trigger = null;
+    public DcMotor Lift = null;
+    public DcMotor Intake = null;
+    public Servo rightClaw = null;
+    public GyroSensor Gyro = null;
 
     private int mLeftEncoder;
     private int mRightEncoder;
@@ -84,14 +84,39 @@ Public class experstatemachine extends OpMode
     private PathSeg mcurrentPath; //array to hold path
     private int     mcurrentSeg; //Index of the current seg in the current path
 
+    //init
+
+@Overide
+    public void init()
+{
+    //initialise class members
+
+    leftMotor   = hwMap.dcMotor.get("left_drive");
+    rightMotor  = hwMap.dcMotor.get("right_drive");
+    Elevator = hwMap.dcMotor.get("Elevator");
+    Trigger = hwMap.dcMotor.get("Trigger");
+    Lift = hwMap.dcMotor.get("Lift");
+    Intake = hwMap.dcMotor.get("Intake");
+    leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+    rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+    Elevator.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+    Trigger.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+    Lift.setDirection(DcMotor.Direction.FORWARD);
+    Intake.setDirection(DcMotor.Direction.FORWARD);
+
+    setDrivePower(0,0); //make sur the robot is standing still
+    resetDriveEncoders();
 
 
+}
 
-
-
-
-
-
+//loop
+    @Override
+    public void init_loop()
+    {
+        resetDriveEncoders();
+        telemetry.addData("ENC",String.format("L:R %d:%d",getLeftPossition(), getRightPossition()));
+    }
 
 
 
