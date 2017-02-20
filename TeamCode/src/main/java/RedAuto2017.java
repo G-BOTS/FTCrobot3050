@@ -121,7 +121,7 @@ public class experstatemachine extends OpMode
     @Override
     public void init_loop() {
         resetDriveEncoders();
-        telemetry.addData("ENC", String.format("L:R %d:%d", getLeftPossition(), getRightPossition()));
+        telemetry.addData("ENC", String.format("L:R %d:%d", getLeftPosition(), getRightPosition()));
         switch (McurrentState)
         {
             case STATE_INITIAL:// stay in this state until both encoders are zero
@@ -135,7 +135,7 @@ public class experstatemachine extends OpMode
 
                 {
                     // display diagnostic data for this sate{}
-                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPossition(), getRightPossition()));
+                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPosition(), getRightPosition()));
 
                 }
 
@@ -150,7 +150,7 @@ public class experstatemachine extends OpMode
                 else
                 {
                     // display diagnostic data for this sate{}
-                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPossition(), getRightPossition()));
+                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPosition(), getRightPosition()));
 
                 }
 
@@ -167,7 +167,7 @@ public class experstatemachine extends OpMode
                 else
                 {
                     // display diagnostic data for this sate{}
-                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPossition(), getRightPossition()));
+                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPosition(), getRightPosition()));
 
                 }
 
@@ -244,9 +244,54 @@ public class experstatemachine extends OpMode
     }
     public void setDriveMode(DcMotor.RunMode mode)
     {
-        if (leftMotor.getChannelMode()!= mode)
+        if (leftMotor.getChannelMode() != mode)
         {
-            leftMotor.setChannelMode(mode);
+            leftMotor.setChannelMode.mode;
+        }
+
+        if (rightMotor.getChannelMode() != mode)
+        {
+            rightMotor.setChannelMode.mode;
         }
     }
+    int getLeftPosition()
+    {
+        return leftMotor.getCurrentPosition();
+    }
+
+    int getRightPosition()
+    {
+        return rightMotor.getCurrentPosition();
+    }
+    boolean moveComplete()
+    {
+        return((math.abs(getLeftPosition()-mLeftEncoderTarget <10)&&(math.abs(getRightPosition()-mRightEncoderTarget<10));
+    }
+    boolean encodersAtZero()
+    {
+      return((math.absgetLeftPosition<5&&math.abs(getRightPosition())))
+    }
+
+    private void startpath(PathSeq[]path)
+    {
+        mcurrentPath=path; //initial path array
+        mcurrentSeg=0;
+        synchEncoders();  //lock in the current possition
+        startSeg();  //Execute the current (firstLeg)
+    }
+    private void startSeg()
+    {
+        int Left;
+        int Right;
+
+        if(mcurrentPath !=null)
+            //load up the next motion based on the current segment
+        {
+            Left = (int)(mcurrentPath[mcurrentSeg].mLeft*COUNTS_PER_INCH);
+            Right = (int)(mcurrentPath[mcurrentSeg].mRight*COUNTS_PER_INCH);
+        }
+    }
+
+
 }
+
