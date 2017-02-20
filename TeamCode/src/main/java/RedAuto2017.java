@@ -227,13 +227,15 @@ public class experstatemachine extends OpMode
     public  void useConstantPower()
     {
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 
     public void resetDriveEncoders()
     {
     setEncoderTarget(0, 0);
-        setMode(DcMotor.RESET_ENCODERS);
+        leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        rightMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
         }
     public void synchEncoders()
     {
