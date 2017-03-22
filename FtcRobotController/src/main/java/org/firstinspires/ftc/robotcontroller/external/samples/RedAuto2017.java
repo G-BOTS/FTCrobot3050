@@ -1,4 +1,4 @@
-/**
+package org.firstinspires.ftc.robotcontroller.external.samples; /**
  * Created by ferasmus on 2/3/2017.
  */
 /*
