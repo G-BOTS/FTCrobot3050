@@ -274,7 +274,7 @@ public class experstatemachine extends OpMode
 
     private void startpath(PathSeq[]path)
     {
-        mcurrentPath=path; //initial path array
+        mcurrentPath = path; //initial path array
         mcurrentSeg=0;
         synchEncoders();  //lock in the current possition
         startSeg();  //Execute the current (firstLeg)
@@ -287,8 +287,8 @@ public class experstatemachine extends OpMode
         if(mcurrentPath !=null)
             //load up the next motion based on the current segment
         {
-            Left = (int)(mcurrentPath[mcurrentSeg].mLeft*COUNTS_PER_INCH);
-            Right = (int)(mcurrentPath[mcurrentSeg].mRight*COUNTS_PER_INCH);
+            Left = (int)(mcurrentPath[mcurrentSeg].mLeft*TicksPerInch);
+            Right = (int)(mcurrentPath[mcurrentSeg].mRight*TicksPerInch);
         }
     }
 
