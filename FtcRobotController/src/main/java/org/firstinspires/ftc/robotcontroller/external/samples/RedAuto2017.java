@@ -36,74 +36,74 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import static android.R.attr.mode;
 
-public class experstatemachine extends OpMode
+public class RedAuto2017 extends OpMode
 {
-        //a list of all the system states
-        private enum State {
-            STATE_INITIAL,
-            STATE_DRIVE_TO_SHOOT,
-            STATE_RELOAD_NEXT_SHOT,
-            STATE_STOP,
-                    _}
-    //pathseg are defined as distances for left wheel and right wheel and then the power to the motors
-        final PathSeg[] mshootpospath ={
-                new PathSeg( 3.2, 3.2, 0.6), //forward
-                new PathSeg( -4.0, 4.0, 0.4) //slowdown and rotate  left
-        };
+    //a list of all the system states
+    private enum State {
+        STATE_INITIAL,
+        STATE_DRIVE_TO_SHOOT,
+        STATE_RELOAD_NEXT_SHOT,
+        STATE_STOP,
+    }
+//pathseg are defined as distances for left wheel and right wheel and then the power to the motors
+    final PathSeg[] mshootpospath = {
+            new PathSeg( 3.2, 3.2, 0.6), //forward
+            new PathSeg( -4.0, 4.0, 0.4), //slowdown and rotate  left
+    };
 
-        final PathSeg[] mParalleltowallpath ={
-                new PathSeg( 3.2, 3.2, 0.6), //forward
-                new PathSeg( -4.0, 4.0, 0.4) //slowdown and rotate  left
-        };
+    final PathSeg[] mParalleltowallpath = {
+            new PathSeg( 3.2, 3.2, 0.6), //forward
+            new PathSeg( -4.0, 4.0, 0.4), //slowdown and rotate  left
+    };
 
+    static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: AndyMark Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 3.8;     // For figuring circumference
+    static final double TicksPerInch = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
 
-        final double TicksPerInch =240;
+    final double TriggerForShoot=500;
+    final double ShooterFullExtend=500;
 
-        final double TriggerForShoot=500;
-        final double ShooterFullExtend=500;
+    //robot devices
+    public DcMotor leftMotor;
+    public DcMotor rightMotor;
+    public DcMotor Elevator;
+    public DcMotor Trigger;
+    public DcMotor Lift;
+    public DcMotor Intake;
+    public Servo rightClaw;
+    public GyroSensor Gyro;
 
-        //robot devices
-        public DcMotor leftMotor = null;
-        public DcMotor rightMotor = null;
-        public DcMotor Elevator = null;
-        public DcMotor Trigger = null;
-        public DcMotor Lift = null;
-        public DcMotor Intake = null;
-        public Servo rightClaw = null;
-        public GyroSensor Gyro = null;
+    private int mLeftEncoder;
+    private int mRightEncoder;
+    //
+    //loop cycle time stats variables
+    public ElapsedTime mRunTime = new ElapsedTime();  //time into round
 
-        private int mLeftEncoder;
-        private int mRightEncoder;
-        //
-        //loop cycle time stats variables
-        public ElapsedTime mRunTime = new ElapsedTime();  //time into round
+    private ElapsedTime mStateTime = new ElapsedTime();  //time into state
 
-        private ElapsedTime mStateTime = new ElapsedTime();  //time into state
+    private State  mcurrentState; //statemachine state
+    private PathSeg[] mcurrentPath; //array to hold path
+    private int     mcurrentSeg; //Index of the current seg in the current path
 
-        private STATE  mcurrentState; //statemachine state
-        private PathSeg mcurrentPath; //array to hold path
-        private int     mcurrentSeg; //Index of the current seg in the current path
-
-        //init
-
+    //init
     @Override
-        public void init()
+    public void init()
     {
         //initialise class members
 
-        leftMotor   = HardwareMap.dcMotor.get("left_drive");
-        rightMotor  = hwMap.dcMotor.get("right_drive");
-        Elevator = hwMap.dcMotor.get("Elevator");
-        Trigger = hwMap.dcMotor.get("Trigger");
-        Lift = hwMap.dcMotor.get("Lift");
-        Intake = hwMap.dcMotor.get("Intake");
+        leftMotor   = hardwareMap.dcMotor.get("left_drive");
+        rightMotor  = hardwareMap.dcMotor.get("right_drive");
+        Elevator = hardwareMap.dcMotor.get("Elevator");
+        Trigger = hardwareMap.dcMotor.get("Trigger");
+        Lift = hardwareMap.dcMotor.get("Lift");
+        Intake = hardwareMap.dcMotor.get("Intake");
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         Elevator.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
@@ -111,57 +111,68 @@ public class experstatemachine extends OpMode
         Lift.setDirection(DcMotor.Direction.FORWARD);
         Intake.setDirection(DcMotor.Direction.FORWARD);
 
+        Gyro = hardwareMap.gyroSensor.get("Gyro");
+
         setDrivePower(0,0); //make sure the robot is standing still
         resetDriveEncoders();
-
-
     }
 
     //loop
-    @Override
+    //@Override
     public void init_loop() {
         resetDriveEncoders();
         telemetry.addData("ENC", String.format("L:R %d:%d", getLeftPosition(), getRightPosition()));
-        switch (McurrentState)
+    }
+
+    @Override
+    public void start()
+    {
+        setDriveSpeed(0, 0);
+        runToPosition();
+        mRunTime.reset();
+        newState(State.STATE_INITIAL);
+    }
+    @Override
+    public void loop()
+    {
+
+        telemetry.addData("0", String.format("%4.1f", mStateTime.time()) + mcurrentState.toString());
+
+        switch (mcurrentState)
         {
             case STATE_INITIAL:// stay in this state until both encoders are zero
-                if (encoders AtZero())
+                if (encodersAtZero())
                 {
-                    StatePath(mshootpospath);  // Load path to shooting posisition
-                    newState(STATE_DRIVE_TO_SHOOT);
+                    startPath(mshootpospath);  // Load path to shooting posisition
+                    newState(State.STATE_DRIVE_TO_SHOOT);
                 }
-
                 else
-
                 {
                     // display diagnostic data for this sate{}
-                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPosition(), getRightPosition()));
-
+                    telemetry.addData("1", String.format("L %5d - R %5d", getLeftPosition(), getRightPosition()));
                 }
 
-            break;
+                break;
 
             case STATE_DRIVE_TO_SHOOT:// stay in this state until both encoders are zero
-                if (encoders AtZero())
+                if (pathComplete())
                 {
-                    StatePath(mshootpospath);  // Load path to shooting posisition
-                    newState(STATE_DRIVE_TO_SHOOT);
+                    startPath(mshootpospath);  // Load path to shooting posisition
+                    newState(State.STATE_DRIVE_TO_SHOOT);
                 }
                 else
                 {
                     // display diagnostic data for this sate{}
                     telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPosition(), getRightPosition()));
-
                 }
-
-            break;
+                break;
 
 
             case STATE_RELOAD_NEXT_SHOT:// stay in this state until both encoders are zero
-                if (encoders AtZero())
+                if (encodersAtZero())
                 {
-                    StatePath(mshootpospath);  // Load path to shooting posisition
-                    newState(STATE_DRIVE_TO_SHOOT);
+                    startPath(mshootpospath);  // Load path to shooting posisition
+                    newState(State.STATE_DRIVE_TO_SHOOT);
                 }
 
                 else
@@ -176,6 +187,7 @@ public class experstatemachine extends OpMode
             break;
         }
     }
+
     @Override
     public void stop()
     {
@@ -193,14 +205,14 @@ public class experstatemachine extends OpMode
     }
     void setEncoderTarget( int LeftEncoder, int RightEncoder)
     {
-        leftMotor.setTargetPosition(mLeftEncoderTarget = LeftEncoder);
-        rightMotor.setTargetPosition(mRightEncoderTarget = RightEncoder);
+        leftMotor.setTargetPosition(mLeftEncoder = LeftEncoder);
+        rightMotor.setTargetPosition(mRightEncoder = RightEncoder);
 
     }
     void addEncoderTarget( int LeftEncoder, int RightEncoder)
     {
-        leftMotor.setTargetPosition(mLeftEncoderTarget  += LeftEncoder);
-        rightMotor.setTargetPosition(mRightEncoderTarget += RightEncoder);
+        leftMotor.setTargetPosition(mLeftEncoder  += LeftEncoder);
+        rightMotor.setTargetPosition(mRightEncoder += RightEncoder);
 
     }
     void setDrivePower(double leftPower, double rightPower)
@@ -212,46 +224,44 @@ public class experstatemachine extends OpMode
     void setDriveSpeed(double leftSpeed, double rightSpeed)
     {
         setDrivePower(leftSpeed, rightSpeed);
-        }
-    public void runToPosition()
-    {
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    public void runToPosition()
+    {
+        setDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 
     public  void useConstantSpeed()
     {
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setDriveMode(DcMotor.RunMode.RUN_USING_ENCODERS);
     }
 
     public  void useConstantPower()
     {
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
     }
-
 
     public void resetDriveEncoders()
     {
-    setEncoderTarget(0, 0);
-        leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        rightMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        }
+        setEncoderTarget(0, 0);
+        setDriveMode(DcMotor.RunMode.RESET_ENCODERS);
+    }
+
     public void synchEncoders()
     {
-        mLeftEncoderTarget = leftMotor.getCurrentPosition();
-        mRightEncoderTarget = rightMotor.getCurrentPosition();
+        mLeftEncoder = leftMotor.getCurrentPosition();
+        mRightEncoder = rightMotor.getCurrentPosition();
     }
+
     public void setDriveMode(DcMotor.RunMode mode)
     {
-        if (leftMotor.getChannelMode() != mode)
-        {
-            leftMotor.setChannelMode.mode;
-        }
+        if (leftMotor.getMode() != mode)
+            leftMotor.setMode(mode);
 
-        if (rightMotor.getChannelMode() != mode)
+
+        if (rightMotor.getMode() != mode)
         {
-            rightMotor.setChannelMode.mode;
+            rightMotor.setMode(mode);
         }
     }
     int getLeftPosition()
@@ -265,20 +275,23 @@ public class experstatemachine extends OpMode
     }
     boolean moveComplete()
     {
-        return((math.abs(getLeftPosition()-mLeftEncoderTarget <10)&&(math.abs(getRightPosition()-mRightEncoderTarget<10));
-    }
-    boolean encodersAtZero()
-    {
-      return((math.absgetLeftPosition<5&&math.abs(getRightPosition())))
+        return ((Math.abs(getLeftPosition() - mLeftEncoder)<10)&&(Math.abs(getRightPosition() - mRightEncoder)<10));
     }
 
-    private void startpath(PathSeq[]path)
+    boolean encodersAtZero()
+    {
+      return ((Math.abs(getLeftPosition()) < 5) && (Math.abs(getRightPosition()) < 5));
+    }
+
+    private void startPath(PathSeg[] path)
     {
         mcurrentPath = path; //initial path array
         mcurrentSeg=0;
         synchEncoders();  //lock in the current possition
+        runToPosition();
         startSeg();  //Execute the current (firstLeg)
     }
+
     private void startSeg()
     {
         int Left;
@@ -289,9 +302,45 @@ public class experstatemachine extends OpMode
         {
             Left = (int)(mcurrentPath[mcurrentSeg].mLeft*TicksPerInch);
             Right = (int)(mcurrentPath[mcurrentSeg].mRight*TicksPerInch);
+            addEncoderTarget(Left, Right);
+            setDriveSpeed(mcurrentPath[mcurrentSeg].mSpeed, mcurrentPath[mcurrentSeg].mSpeed);
+
+            mcurrentSeg++;
         }
     }
 
-
+    private boolean pathComplete()
+    {
+        if(moveComplete())
+        {
+            if(mcurrentSeg < mcurrentPath.length)
+            {
+                startSeg();
+            }
+            else
+            {
+                mcurrentPath = null;
+                mcurrentSeg = 0;
+                setDriveSpeed(0, 0);
+                useConstantSpeed();
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
+class PathSeg
+{
+    public double mLeft;
+    public double mRight;
+    public double mSpeed;
+
+    // Constructor
+    public PathSeg(double Left, double Right, double Speed)
+    {
+        mLeft = Left;
+        mRight = Right;
+        mSpeed = Speed;
+    }
+}

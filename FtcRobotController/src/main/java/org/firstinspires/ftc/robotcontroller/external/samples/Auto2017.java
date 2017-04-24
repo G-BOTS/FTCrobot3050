@@ -75,6 +75,24 @@ public class Auto2017  extends LinearOpMode {
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
+    public void DriveTicksHeading(float forward,float inches,float desheading)
+    {
+        double target = inches * COUNTS_PER_INCH;
+        float MAINTAIN = desheading;
+        float gyro_P = .6f;
+
+        float angle_error = MAINTAIN - robot.Gyro.getHeading();
+        float turn = angle_error * gyro_P;
+
+        while((robot.leftMotor.getCurrentPosition() < target)&&(robot.rightMotor.getCurrentPosition() < target))
+        {
+            float err = MAINTAIN - robot.Gyro.getHeading();
+            turn = err * gyro_P;
+
+            robot.leftMotor.setPower(forward + turn);
+            robot.leftMotor.setPower(-forward + turn);
+        }
+    }
 
     public void encoderDrive(double leftspeed, double rightspeed, double leftInches, double rightInches, double timeoutS) {
         int newLeftTarget;
