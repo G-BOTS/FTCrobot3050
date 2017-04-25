@@ -17,13 +17,12 @@ public class Demo extends OpMode
     DcMotor leftmotor;
     DcMotor rightmotor;
 
-    HardwareMap hwMap = null;
 
     @Override
-    public void init(){
-
-        leftmotor  =hwMap.dcMotor.get("left_drive");
-        rightmotor =hwMap.dcMotor.get("right_drive");
+    public void init()
+    {
+        leftmotor  = hardwareMap.dcMotor.get("left_drive");
+        rightmotor = hardwareMap.dcMotor.get("right_drive");
 
         //reverse the right motor
         rightmotor.setDirection(DcMotor.Direction.REVERSE);
@@ -47,6 +46,7 @@ public class Demo extends OpMode
             leftmotor.setPower(leftY);
             rightmotor.setPower(rightY);
         }
+
         if((gamepad1.a) && (gamepad1.b))
         {
             resetStartTime();

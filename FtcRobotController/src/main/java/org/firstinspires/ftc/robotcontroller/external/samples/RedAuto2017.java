@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.robotcontroller.external.samples; /**
  * Created by ferasmus on 2/3/2017.
  */
@@ -47,7 +48,10 @@ public class RedAuto2017 extends OpMode
     private enum State {
         STATE_INITIAL,
         STATE_DRIVE_TO_SHOOT,
+        STATE_LOAD_SHOOTER,
+        STATE_SHOOT_SHOOTER,
         STATE_RELOAD_NEXT_SHOT,
+        STATE_DRIVE_TO_BEACON,
         STATE_STOP,
     }
 //pathseg are defined as distances for left wheel and right wheel and then the power to the motors
@@ -111,6 +115,9 @@ public class RedAuto2017 extends OpMode
         Lift.setDirection(DcMotor.Direction.FORWARD);
         Intake.setDirection(DcMotor.Direction.FORWARD);
 
+        Elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Trigget.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         Gyro = hardwareMap.gyroSensor.get("Gyro");
 
         setDrivePower(0,0); //make sure the robot is standing still
@@ -157,8 +164,8 @@ public class RedAuto2017 extends OpMode
             case STATE_DRIVE_TO_SHOOT:// stay in this state until both encoders are zero
                 if (pathComplete())
                 {
-                    startPath(mshootpospath);  // Load path to shooting posisition
-                    newState(State.STATE_DRIVE_TO_SHOOT);
+                    Elevator.setTargetPosition(2000);
+                    newState(State.STATE_LOAD_SHOOTER);
                 }
                 else
                 {
@@ -168,23 +175,85 @@ public class RedAuto2017 extends OpMode
                 break;
 
 
-            case STATE_RELOAD_NEXT_SHOT:// stay in this state until both encoders are zero
-                if (encodersAtZero())
+            case STATE_LOAD_SHOOTER:// stay in this state until both encoders are zero
+                if ((getElevatorPosition() > 1990)&&(getElevatorPosition() < 2010))
                 {
-                    startPath(mshootpospath);  // Load path to shooting posisition
-                    newState(State.STATE_DRIVE_TO_SHOOT);
+                    Trigger.setTargetPosition(125);
+                    newState(State.STATE_SHOOT_SHOOTER);
                 }
-
                 else
                 {
                     // display diagnostic data for this sate{}
-                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPosition(), getRightPosition()));
+                    telemetry.addData("1", String.format("Elevator Postion: %7f", getElevatorPosition())));
 
                 }
+                break;
 
-            break;
+            case STATE_SHOOT_SHOOTER:
+                if(getTriggerPosition() == 125)
+                {
+                    Elevator.setTargetPosition(0);
+                    newState(State.STATE_RELOAD_NEXT_SHOT);
+                }
+                else
+                {
+                    telemetry.addData("1", String.format("Trigger Position: %7f", getTriggerPosition()));
+                }
+                break;
+
+            case STATE_RELOAD_NEXT_SHOT:
+                if(getElevatorPosition() == 0)
+                {
+                    Intake.setPower(0.5);
+                    Trigger.setTargetPosition(-0.5);
+                    newState(State.STATE_LOAD_SHOOTER);
+                }
+                else
+                {
+                    telemetry.addData("1", String.format("Elevator Position: %7f", getElevatorPosition()));
+                }
+                break;
+
+            case STATE_LOAD_SHOOTER:
+                if((mStateTime.time() > 5.0) && (getTriggerPosition() < 0))
+                {
+                    Elevator.setTargetPosition(2000);
+                    newState(State.STATE_SHOOT_SHOOTER);
+                }
+                else
+                {
+                    telemetry.addData("1", String.format("Intake Timer: %7f TriggerPosition: %7f", mStateTime.time(), getTriggerPosition()));
+                }
+                break;
+
+            case STATE_SHOOT_SHOOTER:
+                if((getElevatorPosition() > 1990) && (getElevatorPosition() < 2010))
+                {
+                    Trigger.setTargetPosition(125);
+                    Elevator.setTargetPosition(0);
+                    startPath(mParalleltowallpath);
+                    newState(State.STATE_DRIVE_TO_BEACON);
+                }
+                else
+                {
+                    telemtry.addData("1", String.formst("Elevator position: %7f", getElevatorPosition()));
+                }
+                break;
+
+            case STATE_DRIVE_TO_BEACON:
+                if(pathComplete())
+                {
+                    useConstantPower();
+                    setDrivePower(0.0, 0.0);
+                }
+                else
+                {
+                    telemetry.addData("1", String.format("L:R %7f:%7f", getLeftPosition(), getRightPosition()));
+                }
+                break;
+
             case STATE_STOP:
-            break;
+                break;
         }
     }
 
@@ -207,14 +276,15 @@ public class RedAuto2017 extends OpMode
     {
         leftMotor.setTargetPosition(mLeftEncoder = LeftEncoder);
         rightMotor.setTargetPosition(mRightEncoder = RightEncoder);
-
     }
+
     void addEncoderTarget( int LeftEncoder, int RightEncoder)
     {
         leftMotor.setTargetPosition(mLeftEncoder  += LeftEncoder);
         rightMotor.setTargetPosition(mRightEncoder += RightEncoder);
 
     }
+
     void setDrivePower(double leftPower, double rightPower)
     {
       leftMotor.setPower(Range.clip(leftPower, -1,1));
@@ -256,8 +326,9 @@ public class RedAuto2017 extends OpMode
     public void setDriveMode(DcMotor.RunMode mode)
     {
         if (leftMotor.getMode() != mode)
+        {
             leftMotor.setMode(mode);
-
+        }
 
         if (rightMotor.getMode() != mode)
         {
@@ -273,6 +344,11 @@ public class RedAuto2017 extends OpMode
     {
         return rightMotor.getCurrentPosition();
     }
+
+    int getElevatorPosition() { reutrn Elevetor.getCurrentPosition(); }
+
+    int getTriggerPosition() { return Trigger.getCurrentPosition(); }
+
     boolean moveComplete()
     {
         return ((Math.abs(getLeftPosition() - mLeftEncoder)<10)&&(Math.abs(getRightPosition() - mRightEncoder)<10));

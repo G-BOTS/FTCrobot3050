@@ -83,6 +83,8 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("PushbotTeleopTank_Iterative", PushbotTeleopTank_Iterative.class);
         manager.register("PushbotAutoDriveByEnocder_Linear", PushbotAutoDriveByEncoder_Linear.class);
         manager.register("Auto2017", Auto2017.class);
+        manager.register("ReadAuto2017", RedAuto2017.class);
+        manager.register("Demo", Demo.class);
 
         /**
          * Any manual OpMode class registrations should go here.
