@@ -34,7 +34,7 @@ public class HardwarePushbot
     public DcMotor  Lift       = null;
     public DcMotor  Intake       = null;
     public Servo    rightClaw   = null;
-    public GyroSensor Gyro  = null;
+    public ModernRoboticsI2cGyro Gyro  = null;
 
     public static final double MID_SERVO       =  0.5 ;
     public static final double ARM_UP_POWER    =  0.45 ;
@@ -68,7 +68,7 @@ public class HardwarePushbot
         Lift.setDirection(DcMotor.Direction.FORWARD);
         Intake.setDirection(DcMotor.Direction.FORWARD);
 
-        Gyro = hwMap.gyroSensor.get("Gyro");
+        Gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("Gyro");
 
         // Set all motors to zero power
         leftMotor.setPower(0);

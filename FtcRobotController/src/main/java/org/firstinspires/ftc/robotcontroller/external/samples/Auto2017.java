@@ -60,7 +60,8 @@ public class Auto2017  extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[1], distance[1], 5.0);  // S1: Forward 24 Inches with 5 Sec timeout shoot ball
+        DriveTicksHeading(0.5f, 12, 0);
+        //encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[1], distance[1], 5.0);  // S1: Forward 24 Inches with 5 Sec timeout shoot ball
        // gyroturn(gyrodegree[1], TURN_SPEED, -TURN_SPEED);
        // encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[2], distance[2], 5.0); // S3:  Forward 43.3 iNCHES
         //gyroturn(gyrodegree[2], TURN_SPEED, -TURN_SPEED);
@@ -94,26 +95,6 @@ public class Auto2017  extends LinearOpMode {
         }
     }
 
-    public void DriveTicksHeading(float forward, float inches,float desheading)
-    {
-        float target = inches * COUNTS_PER_INCH;
-
-        float MAINTAIN = desheading;
-        float GYRO_P = .6f;
-
-        float angle_error = MAINTAIN - robot.Gyro.getHeading();
-        float turn = GYRO_P * angle_error;
-        while(robot.leftmotor.getCurrentPosition() < target)&&(robot.rightmotor.getCurrentPosition() < target)&&(opModeisActive())
-        {
-            float err = MAINTAIN - robot.Gyro.GetHeading();
-            turn = err * GYRO_P;
-
-            robot.leftmotor.setPower(forward + turn);
-            robot.rightmotor.setPower(-forward + turn);
-        }
-        robot.leftmotor.setPower(0);
-        robot.rightmotor.setPower(0);
-    }
     public void encoderDrive(double leftspeed, double rightspeed, double leftInches, double rightInches, double timeoutS) {
         int newLeftTarget;
         int newRightTarget;
