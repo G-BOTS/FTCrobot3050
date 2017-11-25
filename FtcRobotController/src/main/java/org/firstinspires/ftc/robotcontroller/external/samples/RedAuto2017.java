@@ -12,10 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
-@Autonomous(name="Pushbot: Auto Drive By Encoder", group="Pushbot")
-//@Disabled
+
 public class RedAuto2017  extends LinearOpMode {
-    HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
+    // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: AndyMark Motor Encoder
@@ -33,6 +32,8 @@ public class RedAuto2017 {
 }
 //WaitForStart*/
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -41,9 +42,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+@Autonomous(name="3050: State Machine Auto", group="3050")
+@Disabled
 
 public class RedAuto2017 extends OpMode
 {
+    HardwarePushbot robot = new HardwarePushbot(); //Use 3050's hardware
+
     //a list of all the system states
     private enum State {
         STATE_INITIAL,
@@ -74,16 +79,6 @@ public class RedAuto2017 extends OpMode
     final double TriggerForShoot=500;
     final double ShooterFullExtend=500;
 
-    //robot devices
-    public DcMotor leftMotor;
-    public DcMotor rightMotor;
-    public DcMotor Elevator;
-    public DcMotor Trigger;
-    public DcMotor Lift;
-    public DcMotor Intake;
-    public Servo rightClaw;
-    public GyroSensor Gyro;
-
     private int mLeftEncoder;
     private int mRightEncoder;
     //
@@ -101,26 +96,7 @@ public class RedAuto2017 extends OpMode
     public void init()
     {
         //initialise class members
-
-        leftMotor   = hardwareMap.dcMotor.get("left_drive");
-        rightMotor  = hardwareMap.dcMotor.get("right_drive");
-        Elevator = hardwareMap.dcMotor.get("Elevator");
-        Trigger = hardwareMap.dcMotor.get("Trigger");
-        Lift = hardwareMap.dcMotor.get("Lift");
-        Intake = hardwareMap.dcMotor.get("Intake");
-        leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        Elevator.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        Trigger.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        Lift.setDirection(DcMotor.Direction.FORWARD);
-        Intake.setDirection(DcMotor.Direction.FORWARD);
-
-        Elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Trigger.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        Gyro = hardwareMap.gyroSensor.get("Gyro");
-
-        setDrivePower(0,0); //make sure the robot is standing still
+        robot.init(hardwareMap);
         resetDriveEncoders();
     }
 
@@ -195,21 +171,21 @@ public class RedAuto2017 extends OpMode
     }
     void setEncoderTarget( int LeftEncoder, int RightEncoder)
     {
-        leftMotor.setTargetPosition(mLeftEncoder = LeftEncoder);
-        rightMotor.setTargetPosition(mRightEncoder = RightEncoder);
+        robot.leftMotor.setTargetPosition(mLeftEncoder = LeftEncoder);
+        robot.rightMotor.setTargetPosition(mRightEncoder = RightEncoder);
     }
 
     void addEncoderTarget( int LeftEncoder, int RightEncoder)
     {
-        leftMotor.setTargetPosition(mLeftEncoder  += LeftEncoder);
-        rightMotor.setTargetPosition(mRightEncoder += RightEncoder);
+        robot.leftMotor.setTargetPosition(mLeftEncoder  += LeftEncoder);
+        robot.rightMotor.setTargetPosition(mRightEncoder += RightEncoder);
 
     }
 
     void setDrivePower(double leftPower, double rightPower)
     {
-      leftMotor.setPower(Range.clip(leftPower, -1,1));
-        rightMotor.setPower(Range.clip(rightPower,-1,1));
+        robot.leftMotor.setPower(Range.clip(leftPower, -1,1));
+        robot.rightMotor.setPower(Range.clip(rightPower,-1,1));
     }
 
     void setDriveSpeed(double leftSpeed, double rightSpeed)
@@ -240,35 +216,35 @@ public class RedAuto2017 extends OpMode
 
     public void synchEncoders()
     {
-        mLeftEncoder = leftMotor.getCurrentPosition();
-        mRightEncoder = rightMotor.getCurrentPosition();
+        mLeftEncoder = robot.leftMotor.getCurrentPosition();
+        mRightEncoder = robot.rightMotor.getCurrentPosition();
     }
 
     public void setDriveMode(DcMotor.RunMode mode)
     {
-        if (leftMotor.getMode() != mode)
+        if (robot.leftMotor.getMode() != mode)
         {
-            leftMotor.setMode(mode);
+            robot.leftMotor.setMode(mode);
         }
 
-        if (rightMotor.getMode() != mode)
+        if (robot.rightMotor.getMode() != mode)
         {
-            rightMotor.setMode(mode);
+            robot.rightMotor.setMode(mode);
         }
     }
     int getLeftPosition()
     {
-        return leftMotor.getCurrentPosition();
+        return robot.leftMotor.getCurrentPosition();
     }
 
     int getRightPosition()
     {
-        return rightMotor.getCurrentPosition();
+        return robot.rightMotor.getCurrentPosition();
     }
 
-    int getElevatorPosition() { return Elevator.getCurrentPosition(); }
+    int getElevatorPosition() { return robot.Elevator.getCurrentPosition(); }
 
-    int getTriggerPosition() { return Trigger.getCurrentPosition(); }
+    int getTriggerPosition() { return robot.Trigger.getCurrentPosition(); }
 
     boolean moveComplete()
     {

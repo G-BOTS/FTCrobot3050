@@ -43,6 +43,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.PushbotAutoDriveBy
 import org.firstinspires.ftc.robotcontroller.external.samples.PushbotTeleopTank_Iterative;
 import org.firstinspires.ftc.robotcontroller.external.samples.RedAuto2017;
 import org.firstinspires.ftc.robotcontroller.external.samples.Teleop2016;
+import org.firstinspires.ftc.robotcontroller.external.samples.Teleop2017;
 
 /**
  * {@link FtcOpModeRegister} is responsible for registering opmodes for use in an FTC game.
@@ -82,10 +83,9 @@ public class FtcOpModeRegister implements OpModeRegister {
         AnnotatedOpModeRegistrar.register(manager);
 
         //manager.register("Teleop2016", Teleop2016.class);
-        manager.register("PushbotTeleopTank_Iterative", PushbotTeleopTank_Iterative.class);
-        manager.register("PushbotAutoDriveByEnocder_Linear", PushbotAutoDriveByEncoder_Linear.class);
-        manager.register("Auto2017", Auto2017.class);
-        manager.register("RedAuto2017", RedAuto2017.class);
+        manager.register("Teleop 2017", Teleop2017.class);
+        manager.register("Auto 2017", Auto2017.class);
+        manager.register("RedAuto 2017", RedAuto2017.class);
         manager.register("Demo", Demo.class);
 
         /**

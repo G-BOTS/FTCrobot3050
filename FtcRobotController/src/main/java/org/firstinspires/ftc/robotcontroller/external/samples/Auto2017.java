@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Disabled
 public class Auto2017  extends LinearOpMode {
 
-    HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
+    Hardware3050 robot = new Hardware3050();   // Use 3050's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: AndyMark Motor Encoder
