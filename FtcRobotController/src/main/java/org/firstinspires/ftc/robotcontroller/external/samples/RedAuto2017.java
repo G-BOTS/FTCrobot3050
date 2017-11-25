@@ -116,7 +116,7 @@ public class RedAuto2017 extends OpMode
         Intake.setDirection(DcMotor.Direction.FORWARD);
 
         Elevator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Trigget.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Trigger.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         Gyro = hardwareMap.gyroSensor.get("Gyro");
 
@@ -184,7 +184,7 @@ public class RedAuto2017 extends OpMode
                 else
                 {
                     // display diagnostic data for this sate{}
-                    telemetry.addData("1", String.format("Elevator Postion: %7f", getElevatorPosition())));
+                    telemetry.addData("1", String.format("Elevator Postion: %7f", getElevatorPosition()));
 
                 }
                 break;
@@ -205,38 +205,13 @@ public class RedAuto2017 extends OpMode
                 if(getElevatorPosition() == 0)
                 {
                     Intake.setPower(0.5);
-                    Trigger.setTargetPosition(-0.5);
+                    Trigger.setTargetPosition(-5);
+                    startPath(mParalleltowallpath);
                     newState(State.STATE_LOAD_SHOOTER);
                 }
                 else
                 {
                     telemetry.addData("1", String.format("Elevator Position: %7f", getElevatorPosition()));
-                }
-                break;
-
-            case STATE_LOAD_SHOOTER:
-                if((mStateTime.time() > 5.0) && (getTriggerPosition() < 0))
-                {
-                    Elevator.setTargetPosition(2000);
-                    newState(State.STATE_SHOOT_SHOOTER);
-                }
-                else
-                {
-                    telemetry.addData("1", String.format("Intake Timer: %7f TriggerPosition: %7f", mStateTime.time(), getTriggerPosition()));
-                }
-                break;
-
-            case STATE_SHOOT_SHOOTER:
-                if((getElevatorPosition() > 1990) && (getElevatorPosition() < 2010))
-                {
-                    Trigger.setTargetPosition(125);
-                    Elevator.setTargetPosition(0);
-                    startPath(mParalleltowallpath);
-                    newState(State.STATE_DRIVE_TO_BEACON);
-                }
-                else
-                {
-                    telemtry.addData("1", String.formst("Elevator position: %7f", getElevatorPosition()));
                 }
                 break;
 
@@ -345,7 +320,7 @@ public class RedAuto2017 extends OpMode
         return rightMotor.getCurrentPosition();
     }
 
-    int getElevatorPosition() { reutrn Elevetor.getCurrentPosition(); }
+    int getElevatorPosition() { return Elevator.getCurrentPosition(); }
 
     int getTriggerPosition() { return Trigger.getCurrentPosition(); }
 

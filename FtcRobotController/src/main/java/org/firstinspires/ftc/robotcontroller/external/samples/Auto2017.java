@@ -75,44 +75,26 @@ public class Auto2017  extends LinearOpMode {
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
-    public void DriveTicksHeading(float forward,float inches,float desheading)
-    {
-        double target = inches * COUNTS_PER_INCH;
-        float MAINTAIN = desheading;
-        float gyro_P = .6f;
-
-        float angle_error = MAINTAIN - robot.Gyro.getHeading();
-        float turn = angle_error * gyro_P;
-
-        while((robot.leftMotor.getCurrentPosition() < target)&&(robot.rightMotor.getCurrentPosition() < target))
-        {
-            float err = MAINTAIN - robot.Gyro.getHeading();
-            turn = err * gyro_P;
-
-            robot.leftMotor.setPower(forward + turn);
-            robot.leftMotor.setPower(-forward + turn);
-        }
-    }
 
     public void DriveTicksHeading(float forward, float inches,float desheading)
     {
-        float target = inches * COUNTS_PER_INCH;
+        double target = inches * COUNTS_PER_INCH;
 
         float MAINTAIN = desheading;
         float GYRO_P = .6f;
 
         float angle_error = MAINTAIN - robot.Gyro.getHeading();
         float turn = GYRO_P * angle_error;
-        while(robot.leftmotor.getCurrentPosition() < target)&&(robot.rightmotor.getCurrentPosition() < target)&&(opModeisActive())
+        while((robot.leftMotor.getCurrentPosition() < target)&&(robot.rightMotor.getCurrentPosition() < target)&&(opModeIsActive()))
         {
-            float err = MAINTAIN - robot.Gyro.GetHeading();
+            float err = MAINTAIN - robot.Gyro.getHeading();
             turn = err * GYRO_P;
 
-            robot.leftmotor.setPower(forward + turn);
-            robot.rightmotor.setPower(-forward + turn);
+            robot.leftMotor.setPower(forward + turn);
+            robot.rightMotor.setPower(-forward + turn);
         }
-        robot.leftmotor.setPower(0);
-        robot.rightmotor.setPower(0);
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
     }
     public void encoderDrive(double leftspeed, double rightspeed, double leftInches, double rightInches, double timeoutS) {
         int newLeftTarget;

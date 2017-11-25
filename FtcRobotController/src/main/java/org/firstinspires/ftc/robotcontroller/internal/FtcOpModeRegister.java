@@ -38,8 +38,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.Auto2017;
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
+import org.firstinspires.ftc.robotcontroller.external.samples.Demo;
 import org.firstinspires.ftc.robotcontroller.external.samples.PushbotAutoDriveByEncoder_Linear;
 import org.firstinspires.ftc.robotcontroller.external.samples.PushbotTeleopTank_Iterative;
+import org.firstinspires.ftc.robotcontroller.external.samples.RedAuto2017;
 import org.firstinspires.ftc.robotcontroller.external.samples.Teleop2016;
 
 /**
@@ -83,7 +85,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("PushbotTeleopTank_Iterative", PushbotTeleopTank_Iterative.class);
         manager.register("PushbotAutoDriveByEnocder_Linear", PushbotAutoDriveByEncoder_Linear.class);
         manager.register("Auto2017", Auto2017.class);
-        manager.register("ReadAuto2017", RedAuto2017.class);
+        manager.register("RedAuto2017", RedAuto2017.class);
         manager.register("Demo", Demo.class);
 
         /**
