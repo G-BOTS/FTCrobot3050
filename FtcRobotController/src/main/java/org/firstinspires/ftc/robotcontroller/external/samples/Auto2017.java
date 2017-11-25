@@ -60,7 +60,8 @@ public class Auto2017  extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[1], distance[1], 5.0);  // S1: Forward 24 Inches with 5 Sec timeout shoot ball
+        DriveTicksHeading(0.5f, 12, 0);
+        //encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[1], distance[1], 5.0);  // S1: Forward 24 Inches with 5 Sec timeout shoot ball
        // gyroturn(gyrodegree[1], TURN_SPEED, -TURN_SPEED);
        // encoderDrive(DRIVE_SPEED, DRIVE_SPEED, distance[2], distance[2], 5.0); // S3:  Forward 43.3 iNCHES
         //gyroturn(gyrodegree[2], TURN_SPEED, -TURN_SPEED);
@@ -75,27 +76,25 @@ public class Auto2017  extends LinearOpMode {
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
-
-    public void DriveTicksHeading(float forward, float inches,float desheading)
+    public void DriveTicksHeading(float forward,float inches,float desheading)
     {
         double target = inches * COUNTS_PER_INCH;
-
         float MAINTAIN = desheading;
-        float GYRO_P = .6f;
+        float gyro_P = .6f;
 
         float angle_error = MAINTAIN - robot.Gyro.getHeading();
-        float turn = GYRO_P * angle_error;
-        while((robot.leftMotor.getCurrentPosition() < target)&&(robot.rightMotor.getCurrentPosition() < target)&&(opModeIsActive()))
+        float turn = angle_error * gyro_P;
+
+        while((robot.leftMotor.getCurrentPosition() < target)&&(robot.rightMotor.getCurrentPosition() < target))
         {
             float err = MAINTAIN - robot.Gyro.getHeading();
-            turn = err * GYRO_P;
+            turn = err * gyro_P;
 
             robot.leftMotor.setPower(forward + turn);
-            robot.rightMotor.setPower(-forward + turn);
+            robot.leftMotor.setPower(-forward + turn);
         }
-        robot.leftMotor.setPower(0);
-        robot.rightMotor.setPower(0);
     }
+
     public void encoderDrive(double leftspeed, double rightspeed, double leftInches, double rightInches, double timeoutS) {
         int newLeftTarget;
         int newRightTarget;

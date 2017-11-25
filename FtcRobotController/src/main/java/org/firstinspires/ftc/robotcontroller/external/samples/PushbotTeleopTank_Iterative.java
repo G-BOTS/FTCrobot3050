@@ -106,6 +106,8 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         double raise;
         double shoot;
         double Ecurrpos;
+        double Tcurrpos;
+        double Triggertarg;
         double up;
         double down;
         double intake;
@@ -121,6 +123,8 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         raise = gamepad1.left_trigger;
         shoot = gamepad1.right_trigger;
         Ecurrpos = robot.Elevator.getCurrentPosition();
+        Tcurrpos = robot.Trigger.getCurrentPosition();
+        Triggertarg = robot.Trigger.getTargetPosition();
         up = .25;
         down = -.25;
         intake = .5;
@@ -131,13 +135,13 @@ public class PushbotTeleopTank_Iterative extends OpMode{
 
         if(gamepad1.right_trigger > 0.05)
         {
-            robot.Trigger.setTargetPosition(-5);
-            robot.Trigger.setPower(shoot);
+            robot.Trigger.setTargetPosition(5);
+            robot.Trigger.setPower(.5);
         }
         else if (gamepad1.right_bumper)
         {
-            robot.Trigger.setTargetPosition(125);
-            robot.Trigger.setPower(.25);
+            robot.Trigger.setTargetPosition(-125);
+            robot.Trigger.setPower(.5);
         }
         else {
             robot.Trigger.setPower(0);
@@ -192,8 +196,10 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         telemetry.addData("shoot", "%.2f", shoot);
         telemetry.addData("raise", "%.2f", raise);
         telemetry.addData("Elevator Encoder", "%.2f", Ecurrpos);
+        telemetry.addData("Trigger Encoder", "%.2f", Tcurrpos);
         telemetry.addData("Intake power", "%.2f", intake_pwr);
         telemetry.addData("Lift power", "%.2f", lift_pwr);
+        telemetry.addData("Trigger Target", "%.2f", Triggertarg);
     }
 
     /*
@@ -202,5 +208,4 @@ public class PushbotTeleopTank_Iterative extends OpMode{
     @Override
     public void stop() {
     }
-
 }

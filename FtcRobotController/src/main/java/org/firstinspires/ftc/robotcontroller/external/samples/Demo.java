@@ -33,23 +33,30 @@ public class Demo extends OpMode
     {
         resetStartTime();
     }
-
     @Override
     public void loop ()
     {
-        while(getRuntime() < 30)
+        float leftY = -gamepad1.left_stick_y;
+
+        float rightY = -gamepad1.right_stick_y;
+
+        if(getRuntime() < 30)
         {
-            float leftY = -gamepad1.left_stick_y;
-
-            float rightY = -gamepad1.right_stick_y;
-
             leftmotor.setPower(leftY);
             rightmotor.setPower(rightY);
+        }
+        else
+        {
+            leftmotor.setPower(0);
+            rightmotor.setPower(0);
         }
 
         if((gamepad1.a) && (gamepad1.b))
         {
             resetStartTime();
         }
+
+        telemetry.addData("RunTime: ","%f", getRuntime());
+
     }
 }
